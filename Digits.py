@@ -38,19 +38,24 @@ class My_knn:
         
     def predict(self, test_x):
         pred_y = []
-        pred_y_counter = []
         count = 0
+        
         for elem in test_x:
             dist = []
+            pred_y_counter = []
+            dist_kmin = []
+            
             for ind, x in enumerate(self.train_x):
                 dist.append((My_knn.distance(elem, x), ind))
+                
             dist_kmin = sorted(dist, key = lambda x: x[0])[:self.k]
             pred_y_count = Counter(self.train_y[[item[1] for item in dist_kmin]])
             pred_y.append(pred_y_count.most_common(1)[0][0])
-            count += 1
             print("count: {}, pred_y: {}".format(count, pred_y_count.most_common(1)[0][0]))
             #if count%100 == 0:
                 #print("count: {}, pred_y: {}".format(count, pred_y[count]))
+            count += 1
+                
         return pred_y
     
     @staticmethod
@@ -58,16 +63,16 @@ class My_knn:
         p = 100.
         im_1 = np.array(im_1)
         im_2 = np.array(im_2)
-        dist = np.sqrt(np.sum((im_1 - im_2)**2))
+        #dist = np.sqrt(np.sum((im_1 - im_2)**2))
         #dist = np.sqrt(np.dot(im_1, im_2) - 2 * np.dot(im_1, im_2) + np.dot(im_1, im_2))
         #dist = np.abs(im_1 - im_2)
-        #dist = np.linalg.norm(im_1 - im_2)
+        dist = np.linalg.norm(im_1 - im_2)
         #dist = (np.sum((im_1 - im_2)**p))**(1/p)
         #dist = np.sum(np.abs(im_1 - im_2))/(np.sum(np.abs(im_2)) + np.sum(np.abs(im_1)))
         #dist = np.sum(im_1*np.log(im_1/im_2))
         return dist
         
-KNN = My_knn(20)
+KNN = My_knn(5)
 
 KNN.fit(X, Y)
 
